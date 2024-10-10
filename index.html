@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Slider</title>
+    <style>
+        .slider-container {
+            margin: 20px 0;
+        }
+        .slider-label {
+            margin-bottom: 5px;
+        }
+        .slider {
+            width: 100%;
+        }
+        .price-display {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slider-container">
+        <div class="slider-label">Users ($6 per additional user): <span id="user-count">0</span></div>
+        <input type="range" id="user-slider" class="slider" min="0" max="100" value="0" step="1">
+    </div>
+
+    <div class="slider-container">
+        <div class="slider-label">Updates ($0.03 per additional update): <span id="update-count">2500</span></div>
+        <input type="range" id="update-slider" class="slider" min="2500" max="50000" value="2500" step="2500">
+    </div>
+
+    <div class="price-display">
+        Your estimated monthly bill: $<span id="total-price">0</span>
+    </div>
+
+    <script>
+        const userSlider = document.getElementById('user-slider');
+        const updateSlider = document.getElementById('update-slider');
+        const userCount = document.getElementById('user-count');
+        const updateCount = document.getElementById('update-count');
+        const totalPriceDisplay = document.getElementById('total-price');
+
+        function calculatePrice() {
+            const additionalUsers = parseInt(userSlider.value, 10);
+            const additionalUpdates = parseInt(updateSlider.value, 10);
+
+            // Pricing rules
+            const userCost = additionalUsers * 6; // $6 per additional user
+            const updateCost = (additionalUpdates - 2500) * 0.03; // $0.03 per additional update
+
+            // Calculate total price
+            const totalPrice = userCost + updateCost;
+
+            // Update the display values
+            totalPriceDisplay.textContent = totalPrice.toFixed(2);
+        }
+
+        // Update the displayed values for the sliders
+        function updateValues() {
+            userCount.textContent = userSlider.value;
+            updateCount.textContent = updateSlider.value;
+        }
+
+        // Event listeners for the sliders
+        userSlider.addEventListener('input', () => {
+            updateValues();
+            calculatePrice();
+        });
+
+        updateSlider.addEventListener('input', () => {
+            updateValues();
+            calculatePrice();
+        });
+
+        // Initial calculation and display update
+        updateValues();
+        calculatePrice();
+    </script>
+
+</body>
+</html>
