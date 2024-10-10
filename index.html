@@ -26,16 +26,23 @@
             margin: 20px 0;
         }
         .slider-label {
-            margin-bottom: 5px;
+            font-size: 16px;
             font-weight: bold;
             color: #333333;
+            margin-bottom: 5px;
+        }
+        .info-text {
+            font-size: 12px;
+            color: #666666;
+            margin-top: -10px;
+            margin-bottom: 15px;
         }
         .slider {
             width: 100%;
             -webkit-appearance: none;
             appearance: none;
             height: 8px;
-            background: #ddd;
+            background: #e0e0e0;
             outline: none;
             border-radius: 5px;
         }
@@ -56,22 +63,22 @@
             cursor: pointer;
         }
         .price-display {
-            margin-top: 20px;
-            font-size: 24px;
-            text-align: center;
-            background-color: #f4f4f4;
-            border-radius: 8px;
-            padding: 15px;
-            color: #333333;
+            margin-top: 30px;
+            font-size: 22px;
             font-weight: bold;
+            color: #333333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .total-price {
+            font-size: 36px;
+            color: #333333;
         }
         .starting-price {
-            font-size: 16px;
-            color: #777777;
+            font-size: 14px;
+            color: #888888;
             margin-top: 5px;
-        }
-        .starting-price-highlight {
-            color: #dbff00;
         }
     </style>
 </head>
@@ -79,21 +86,24 @@
 
     <div class="pricing-container">
         <div class="slider-container">
-            <div class="slider-label">Users ($6 per additional user): <span id="user-count">20</span></div>
+            <div class="slider-label">Users</div>
+            <div class="info-text">$6 per additional user</div>
             <input type="range" id="user-slider" class="slider" min="20" max="80" value="20" step="1">
+            <div id="user-count" class="info-text">20 users</div>
         </div>
 
         <div class="slider-container">
-            <div class="slider-label">Updates ($0.03 per additional update): <span id="update-count">5k</span></div>
+            <div class="slider-label">Updates</div>
+            <div class="info-text">$0.03 per additional update</div>
             <input type="range" id="update-slider" class="slider" min="5000" max="50000" value="5000" step="5000">
+            <div id="update-count" class="info-text">5k updates</div>
         </div>
 
         <div class="price-display">
-            Your estimated monthly bill: $<span id="total-price">150</span>
-            <div class="starting-price">
-                <span class="starting-price-highlight">Starting at $150</span> per month billed monthly
-            </div>
+            <span>Your estimated monthly bill</span>
+            <span class="total-price">$<span id="total-price">150</span></span>
         </div>
+        <div class="starting-price">Starting at $150 per month billed monthly</div>
     </div>
 
     <script>
@@ -107,11 +117,8 @@
             const additionalUsers = parseInt(userSlider.value, 10);
             const additionalUpdates = parseInt(updateSlider.value, 10);
 
-            // Determine base pricing based on the number of users and updates
+            // Base pricing at $150
             let basePrice = 150;
-            if (additionalUsers >= 40 || additionalUpdates >= 10000) {
-                basePrice = 450;
-            }
 
             // Calculate additional user cost
             let userCost = (additionalUsers - 20) * 6; // $6 per additional user beyond the initial 20 users
@@ -132,13 +139,8 @@
         // Update the displayed values for the sliders
         function updateValues() {
             let userValue = parseInt(userSlider.value, 10);
-            if (userValue > 40) {
-                userSlider.step = 1;
-            } else {
-                userSlider.step = 20;
-            }
-            userCount.textContent = userValue;
-            updateCount.textContent = updateSlider.value >= 1000 ? `${updateSlider.value / 1000}k` : updateSlider.value;
+            userCount.textContent = `${userValue} users`;
+            updateCount.textContent = `${updateSlider.value / 1000}k updates`;
         }
 
         // Event listeners for the sliders
