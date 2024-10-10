@@ -88,13 +88,13 @@
 
     <div class="pricing-container">
         <div class="slider-container">
-            <div class="slider-label">Users ($6 per additional user): <span id="user-count">0</span></div>
-            <input type="range" id="user-slider" class="slider" min="0" max="100" value="0" step="1">
+            <div class="slider-label">Users ($6 per additional user): <span id="user-count">20</span></div>
+            <input type="range" id="user-slider" class="slider" min="20" max="40" value="20" step="20">
         </div>
 
         <div class="slider-container">
-            <div class="slider-label">Updates ($0.03 per additional update): <span id="update-count">2500</span></div>
-            <input type="range" id="update-slider" class="slider" min="2500" max="50000" value="2500" step="2500">
+            <div class="slider-label">Updates ($0.03 per additional update): <span id="update-count">5k</span></div>
+            <input type="range" id="update-slider" class="slider" min="5000" max="50000" value="5000" step="5000">
         </div>
 
         <div class="price-display">
@@ -116,15 +116,20 @@
             const additionalUsers = parseInt(userSlider.value, 10);
             const additionalUpdates = parseInt(updateSlider.value, 10);
 
-            // Base pricing based on updates slider value
-            let basePrice = additionalUpdates >= 10000 ? 450 : 150;
+            // Determine base pricing based on the number of users and updates
+            let basePrice = 150;
+            if (additionalUsers >= 40 || additionalUpdates >= 10000) {
+                basePrice = 450;
+            }
 
-            // Pricing rules
-            const userCost = additionalUsers * 6; // $6 per additional user
-            const updateCost = (additionalUpdates - 2500) * 0.03; // $0.03 per additional update
+            // Calculate the additional update cost only if above 10k updates
+            let updateCost = 0;
+            if (additionalUpdates > 10000) {
+                updateCost = (additionalUpdates - 10000) * 0.03;
+            }
 
             // Calculate total price
-            const totalPrice = basePrice + userCost + updateCost;
+            const totalPrice = basePrice + updateCost;
 
             // Update the display values
             totalPriceDisplay.textContent = totalPrice.toFixed(2);
