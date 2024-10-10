@@ -33,7 +33,7 @@
     </div>
 
     <div class="price-display">
-        Your estimated monthly bill: $<span id="total-price">0</span>
+        Your estimated monthly bill: $<span id="total-price">150</span>
     </div>
 
     <script>
@@ -47,12 +47,15 @@
             const additionalUsers = parseInt(userSlider.value, 10);
             const additionalUpdates = parseInt(updateSlider.value, 10);
 
+            // Base pricing based on updates slider value
+            let basePrice = additionalUpdates >= 10000 ? 450 : 150;
+
             // Pricing rules
             const userCost = additionalUsers * 6; // $6 per additional user
             const updateCost = (additionalUpdates - 2500) * 0.03; // $0.03 per additional update
 
             // Calculate total price
-            const totalPrice = userCost + updateCost;
+            const totalPrice = basePrice + userCost + updateCost;
 
             // Update the display values
             totalPriceDisplay.textContent = totalPrice.toFixed(2);
