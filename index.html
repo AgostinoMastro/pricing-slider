@@ -71,6 +71,7 @@
             font-weight: bold;
             color: #333;
             transition: left 0.1s ease-in-out;
+            transform: translateX(-50%);
         }
         .price-display {
             margin-top: 30px;
@@ -152,11 +153,11 @@
         // Update the displayed values for the sliders
         function updateValues() {
             const userValuePosition = (userSlider.value - 20) / (80 - 20) * 100;
-            userValue.style.left = `calc(${userValuePosition}% - 20px)`;
+            userValue.style.left = `calc(${userValuePosition}% - 10px)`;
             userValue.textContent = userSlider.value;
 
             const updateValuePosition = (updateSlider.value - 5000) / (50000 - 5000) * 100;
-            updateValue.style.left = `calc(${updateValuePosition}% - 20px)`;
+            updateValue.style.left = `calc(${updateValuePosition}% - 10px)`;
             updateValue.textContent = `${updateSlider.value / 1000}k`;
         }
 
