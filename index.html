@@ -23,7 +23,8 @@
             width: 100%;
         }
         .slider-container {
-            margin: 20px 0;
+            margin: 40px 0;
+            position: relative;
         }
         .slider-label {
             font-size: 16px;
@@ -62,6 +63,15 @@
             border-radius: 50%;
             cursor: pointer;
         }
+        .slider-value {
+            position: absolute;
+            top: -30px;
+            left: 0;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            transition: left 0.1s ease-in-out;
+        }
         .price-display {
             margin-top: 30px;
             font-size: 22px;
@@ -88,15 +98,15 @@
         <div class="slider-container">
             <div class="slider-label">Users</div>
             <div class="info-text">$6 per additional user</div>
+            <div id="user-value" class="slider-value">20</div>
             <input type="range" id="user-slider" class="slider" min="20" max="80" value="20" step="1">
-            <div id="user-count" class="info-text">20 users</div>
         </div>
 
         <div class="slider-container">
             <div class="slider-label">Updates</div>
             <div class="info-text">$0.03 per additional update</div>
+            <div id="update-value" class="slider-value">5k</div>
             <input type="range" id="update-slider" class="slider" min="5000" max="50000" value="5000" step="5000">
-            <div id="update-count" class="info-text">5k updates</div>
         </div>
 
         <div class="price-display">
@@ -109,24 +119,27 @@
     <script>
         const userSlider = document.getElementById('user-slider');
         const updateSlider = document.getElementById('update-slider');
-        const userCount = document.getElementById('user-count');
-        const updateCount = document.getElementById('update-count');
+        const userValue = document.getElementById('user-value');
+        const updateValue = document.getElementById('update-value');
         const totalPriceDisplay = document.getElementById('total-price');
 
         function calculatePrice() {
             const additionalUsers = parseInt(userSlider.value, 10);
             const additionalUpdates = parseInt(updateSlider.value, 10);
 
-            // Base pricing at $150
+            // Determine base pricing
             let basePrice = 150;
+            if (additionalUpdates >= 10000) {
+                basePrice = 450;
+            }
 
             // Calculate additional user cost
             let userCost = (additionalUsers - 20) * 6; // $6 per additional user beyond the initial 20 users
 
-            // Calculate the additional update cost only if above 10k updates
+            // Calculate the additional update cost only if above 5k updates
             let updateCost = 0;
-            if (additionalUpdates > 10000) {
-                updateCost = (additionalUpdates - 10000) * 0.03;
+            if (additionalUpdates > 5000) {
+                updateCost = (additionalUpdates - 5000) * 0.03;
             }
 
             // Calculate total price
@@ -138,9 +151,13 @@
 
         // Update the displayed values for the sliders
         function updateValues() {
-            let userValue = parseInt(userSlider.value, 10);
-            userCount.textContent = `${userValue} users`;
-            updateCount.textContent = `${updateSlider.value / 1000}k updates`;
+            const userValuePosition = (userSlider.value - 20) / (80 - 20) * 100;
+            userValue.style.left = `calc(${userValuePosition}% - 20px)`;
+            userValue.textContent = userSlider.value;
+
+            const updateValuePosition = (updateSlider.value - 5000) / (50000 - 5000) * 100;
+            updateValue.style.left = `calc(${updateValuePosition}% - 20px)`;
+            updateValue.textContent = `${updateSlider.value / 1000}k`;
         }
 
         // Event listeners for the sliders
