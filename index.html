@@ -65,9 +65,7 @@
         }
         .slider-value {
             position: absolute;
-            top: -35px; /* Adjusted to be closer to the slider */
-            left: 50%;
-            transform: translateX(-50%);
+            top: -25px; /* Positioned closer to the slider thumb */
             font-size: 14px;
             font-weight: bold;
             color: #333;
@@ -152,12 +150,15 @@
 
         // Update the displayed values for the sliders
         function updateValues() {
-            const userValuePosition = (userSlider.value - 20) / (80 - 20) * 100;
-            userValue.style.left = `calc(${userValuePosition}% - 10px)`;
+            const userSliderRect = userSlider.getBoundingClientRect();
+            const updateSliderRect = updateSlider.getBoundingClientRect();
+
+            const userValuePosition = (userSlider.value - 20) / (80 - 20) * (userSliderRect.width - 20) + 10;
+            userValue.style.left = `${userValuePosition}px`;
             userValue.textContent = userSlider.value;
 
-            const updateValuePosition = (updateSlider.value - 5000) / (50000 - 5000) * 100;
-            updateValue.style.left = `calc(${updateValuePosition}% - 10px)`;
+            const updateValuePosition = (updateSlider.value - 5000) / (50000 - 5000) * (updateSliderRect.width - 20) + 10;
+            updateValue.style.left = `${updateValuePosition}px`;
             updateValue.textContent = `${updateSlider.value / 1000}k`;
         }
 
